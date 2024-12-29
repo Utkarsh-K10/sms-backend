@@ -1,7 +1,7 @@
-import { asyncHandler} from "../utils/asyncHandler";
-import { apiErrorHandler } from "../utils/apiErrorHandler";
-import { apiResponse} from "../utils/apiResponse"
-import { User } from "../model/user.model";
+import { asyncHandler} from "../utils/asyncHandler.js";
+import { apiErrorHandler } from "../utils/apiErrorHandler.js";
+import { apiResponse} from "../utils/apiResponse.js"
+import { User } from "../model/user.model.js";
 
 const registerUser = asyncHandler(
     async (req, res) => {
@@ -11,7 +11,7 @@ const registerUser = asyncHandler(
             throw new apiErrorHandler(400, "All fields are required");
         }
 
-        const existedUser = await User.findone({
+        const existedUser = await User.findOne({
             $or: [{username}, {email}]
         })
 
