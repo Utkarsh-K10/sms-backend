@@ -25,9 +25,9 @@ const registerUser = asyncHandler(
         if(existedUser){
             throw new apiErrorHandler(400, "User with this email or username already exists");
         }
-        console.log(req.files)
+        console.log("re.files:",req.files)
 
-        const avatarLocalPath = req.files?.files[0]?.path 
+        const avatarLocalPath = req.files?.avatar[0]?.path 
 
         if(!avatarLocalPath){
             throw new apiErrorHandler(409, "File is required")
