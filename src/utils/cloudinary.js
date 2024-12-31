@@ -7,7 +7,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET 
 });
 
-const cloudinaryUploader = async (localFilePath) => {
+const cloudinaryImageUploader = async (localFilePath) => {
     try {
         if(!localFilePath){
             return null // return null if no file is uploaded or throw an error
@@ -38,4 +38,5 @@ const cloudinaryImageRemover = async (targetUrl) => {
     }
 }
 
-export { cloudinaryUploader, cloudinaryImageRemover };
+
+export { cloudinaryImageUploader, cloudinaryImageRemover };
