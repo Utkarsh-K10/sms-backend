@@ -4,11 +4,12 @@ import { apiResponse} from "../utils/apiResponse.js"
 import { User } from "../model/user.model.js";
 import { cloudinaryImageUploader } from "../utils/cloudinary.js";
 
-//  get user detail 
+//  get user login detail 
 //  validate input fileds
 // checek user exists
-// get avtar local path from multer and validate
-// update user into database
+// password check
+// generate token
+// send cookies
 
 const registerUser = asyncHandler(
     async (req, res) => {
@@ -60,5 +61,34 @@ const registerUser = asyncHandler(
     }
 );
 
+const loginUser = asyncHandler(async(req,res) => {
+    const{email, username, password} = req.body;
 
-export { registerUser };    
+    if([email, username, password].some((field)=>{field?.trim()===""})){
+        throw new apiErrorHandler(400, "please enter login credentials");
+    }
+
+    if(!email || !username){
+        throw new apiErrorHandler(400, "please enter email or username");
+    }
+
+    const user = await User.findOne({
+        $or: [{email}, {username}]
+    })
+
+    if(!user){
+        throw new apiErrorHandler(404, "User not exists");
+    }
+
+    const isPasswordValid = await user.isPasswordCorrect(password);
+
+    if(!isPasswordValid){
+        throw new apiErrorHandler(400, "Invalid login credentials");
+    }
+
+});
+
+export { 
+    registerUser,
+    loginUser 
+};    
