@@ -19,11 +19,11 @@ export const verifyJWT = asyncHandler(async(req, res, next) => {
         }
 
         const user = await User.findById(decodedToken?._id).select("-password -refreshToken");
-        
+
         req.user = user;
         next()
 
     } catch (error) {
-        throw new apiErrorHandler(401, "Unauthorized Access"); 
+        throw new apiErrorHandler(401, error?.message || "Invalid Acssess Token"); 
     }
 })
