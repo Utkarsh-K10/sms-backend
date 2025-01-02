@@ -6,19 +6,27 @@ import jwt from "jsonwebtoken";
 export const verifyJWT = asyncHandler(async(req, res, next) => {
     try {
         
-        const token = req.cookies?.accessToken || req.headers("Authorization" || "authorization")?.replace("Bearer ", "");
+        const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
 
-        if(!token){
+        // console.log(token)
+
+        if (!token) {
             throw new apiErrorHandler(401, "Unauthorized Access");
         }
 
         const decodedToken = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET)
         
-        if(!decodedToken){
+        if (!decodedToken) {
             throw new apiErrorHandler(401, "Invalid token");
         }
+        // decodedToken.id > it return "id not _id"
+        console.log("decodedToken :",decodedToken.id) 
 
-        const user = await User.findById(decodedToken?._id).select("-password -refreshToken");
+        const user = await User.findById(decodedToken?.id).select("-password -refreshToken");
+
+        if (!user) {
+            throw new apiErrorHandler(401, "User not found");
+        }
 
         req.user = user;
         next()

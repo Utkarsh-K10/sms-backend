@@ -80,11 +80,11 @@ const registerUser = asyncHandler(
 const loginUser = asyncHandler(async(req,res) => {
     const{email, username, password} = req.body;
 
-    if([email, username, password].some((field)=>{field?.trim()===""})){
-        throw new apiErrorHandler(400, "please enter login credentials");
-    }
+    // if([email, username, password].some((field)=>{field?.trim()===""})){
+    //     throw new apiErrorHandler(400, "please enter login credentials");
+    // }
 
-    if(!email || !username){
+    if(!email && !username){
         throw new apiErrorHandler(400, "please enter email or username");
     }
 
@@ -114,7 +114,7 @@ const loginUser = asyncHandler(async(req,res) => {
 
     return res
     .status(200)
-    .cookie("accessToekn", accessToken, options)
+    .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
     .json(
         new apiResponse(
@@ -146,10 +146,10 @@ const logoutUser = asyncHandler(async (req, res) => {
 
     return res
     .status(200)
-    .clearCookies("accessToken", options)
-    .clearCookies("refreshToken", options)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
     .json(
-        apiResponse(
+        new apiResponse(
             200,
             {}, 
             "User logged out successfully"
