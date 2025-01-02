@@ -120,7 +120,7 @@ const loginUser = asyncHandler(async(req,res) => {
         new apiResponse(
             200,
             {loggedInUser, accessToken, refreshToken},
-            "User logges in successfully"
+            "User logged in successfully"
         )
     )
 
@@ -130,3 +130,4 @@ export {
     registerUser,
     loginUser 
 };    
+
