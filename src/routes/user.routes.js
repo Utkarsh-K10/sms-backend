@@ -29,5 +29,6 @@ userRouter.route('/login').post(loginUser)
 // secured route
 userRouter.route('/logout').post(verifyJWT, logoutUser)
 userRouter.route('/refresh-token').post(refreshAccessToken)
+userRouter.route('/carusel').post(verifyJWT,)
 
 export default userRouter;
