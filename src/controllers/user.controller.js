@@ -11,6 +11,22 @@ import { cloudinaryImageUploader } from "../utils/cloudinary.js";
 // generate token
 // send cookies
 
+const generateAccessRefreshToken = async(userId) => 
+{   
+    try {
+        const user = await User.findById(userId);
+        const accessToken = user.generateAccessToken();
+        const refreshToken = user.generateRefreshToken();
+
+        user.refreshToken = refreshToken;
+        await user.save({validateBeforeSave: false});
+
+        return {accessToken, refreshToken}
+
+    } catch (error) {
+        throw new apiErrorHandler(500, "Something went wrong while generating access and refresh token")
+    }
+}
 const registerUser = asyncHandler(
     async (req, res) => {
         const { username, email, role, password } = req.body;
@@ -85,6 +101,28 @@ const loginUser = asyncHandler(async(req,res) => {
     if(!isPasswordValid){
         throw new apiErrorHandler(400, "Invalid login credentials");
     }
+
+    const {accessToken, refreshToken} = await generateAccessRefreshToken(user._id);
+    
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    // const validUser = user.select("-password -refreshToken");
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
+
+    return res
+    .status(200)
+    .cookie("accessToekn", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+        new apiResponse(
+            200,
+            {loggedInUser, accessToken, refreshToken},
+            "User logges in successfully"
+        )
+    )
 
 });
 
