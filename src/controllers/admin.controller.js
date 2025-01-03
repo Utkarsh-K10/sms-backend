@@ -20,10 +20,6 @@ const uploadCarousal = asyncHandler(async (req, res) =>{
         }
 
         let carousalLocalPaths = files.map(file => file.path);
-        // if(req.files && Array.isArray(req.files.carousalImage) && req.files.carousalImage.length > 0)
-        //     {
-        //         carousalLocalPaths = req.files
-        //     }
     
         console.log("carousalLocalPaths:", carousalLocalPaths)
     
