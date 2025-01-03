@@ -32,9 +32,9 @@ const uploadCarousal = asyncHandler(async (req, res) =>{
         }
         
         
-        const createdcarousal = await Carousal.create(
-            {title, carousalImage: carousalImagespath?.url || ""}
-        )
+        // const createdcarousal = await Carousal.create(
+        //     {title, carousalImage: carousalImagespath?.url || ""}
+        // )
         
         if (!createdcarousal) {
             throw new apiErrorHandler(500, "something went wrong while creating carousal");
